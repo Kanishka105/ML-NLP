@@ -1,0 +1,22 @@
+import pandas as pd
+import sys
+import os
+sys.path.append(os.path.abspath(".."))
+from src.preprocessing.cleaning import text_cleaning_function, category_validate
+df1=pd.read_csv("../data/raw/spamEmail/email.csv")
+df1.drop_duplicates(inplace=True)
+df1["Message"] = df1["Message"].apply(text_cleaning_function)
+df1=category_validate("Category",df1)
+df1 = df1[df1["Message"].str.strip() != ""].reset_index(drop=True)
+df1.to_csv("../data/processed/spamEmail.csv",index=False)
+
+df2=pd.read_csv("../data/raw/categoryEmail/email_classification_dataset.csv")
+df2.drop_duplicates(inplace=True)
+df2["body"]=df2["body"].apply(text_cleaning_function)
+df2["CombineText"]=df2["text"].apply(text_cleaning_function)
+df2["subject"]=df2["subject"].apply(text_cleaning_function)
+df2.to_csv("../data/processed/email_classification_dataset.csv")
+
+
+
+
